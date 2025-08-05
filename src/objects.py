@@ -7,6 +7,7 @@ class Vehicle:
         Initializes the Vehicle object with a model path and location and trailer/caravan attach point.
         """
         self.obj = self._import_model(model_path)
+        self.set_location(location)
         self.attach_point = mathutils.Vector(attach_point)
         # Set the vehicle's orientation vectors
         # Forward direction is assumed to be along the negative X-axis, Right direction is along the negative Y-axis, and Up direction is along the Z-axis
@@ -34,6 +35,15 @@ class Vehicle:
             vehicle_obj.name = "Vehicle"
             return vehicle_obj
     
+    def set_location(self, location:tuple):
+        """
+        Sets the location of the vehicle.
+        """
+        if isinstance(location, (tuple, list)) and len(location) == 3:
+            self.obj.location = location
+        else:
+            raise ValueError("Location must be a tuple or list with three elements (x, y, z).")
+
     def get_world_location(self, local_point:mathutils.Vector) -> mathutils.Vector:
         """
         Returns the world location of the vehicle.
@@ -44,6 +54,14 @@ class Vehicle:
         return None
 if __name__ == "__main__":
     # Example usage
+    import sys, os
+    # Ensure the script can find the utils module
+    this_dir = os.path.dirname(__file__)
+    if this_dir not in sys.path:
+        sys.path.append(this_dir)
 
-    vehicle = Vehicle(model_path="C:Datas/Trailer_mirror/mirror_sim/models/vehicles/GLS580/GLS580.obj", location=(0, 0, 0), attach_point=(-3.5, 0, 0.5))
+    from untils import clear_scene    
+    clear_scene()   
+
+    vehicle = Vehicle(model_path="C:\Datas\\trailer_mirror\mirror_sim\models\\vehicles\GLS580\GLS580.obj", location=(0, 0, 0), attach_point=(-3.5, 0, 0.5))
     print("Vehicle world location:", vehicle.get_world_location(mathutils.Vector((0, 0, 0))))
